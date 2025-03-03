@@ -1,35 +1,49 @@
 import { Box } from "@mui/material";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { TestData } from "./components/TestData";
+import { AuthProvider } from "./context/AuthContext";
+import { Login } from "./components/Auth/Login";
+import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
+import { Navigation } from "./components/Navigation";
+import { ProtectedTestData } from "./components/ProtectedTestData";
+import { AuthRedirect } from "./components/Auth/AuthRedirected";
+import CountriesList from "./components/CountriesList";
+import { CountryDetails } from "./components/CountryDetails";
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Box sx={{ p: 3 }}>
-        {/* Basic navigation */}
-        <Box sx={{ mb: 3 }}>
-          <Link to="/" style={{ marginRight: "1rem" }}>
-            Home
-          </Link>
-          <Link to="/test">Test Data</Link>
-        </Box>
-
-        {/* Routes */}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Box>
-                <h1>Welcome to the Home Page</h1>
-                <p>Use the navigation above to explore the app</p>
-              </Box>
-            }
-          />
-          <Route path="/test" element={<TestData />} />
-        </Routes>
-      </Box>
-    </BrowserRouter>
-  );
-}
+function App() { 
+    return (
+      <AuthProvider>
+        <BrowserRouter>
+          <Box>
+            <Navigation />
+            <Box sx={{ p: 3 }}>
+              <Routes>
+                <Route path="login" 
+                element={
+                  <>
+                    <AuthRedirect />
+                    <Login />
+                  </>
+                  } 
+                  />
+                <Route path="test" element={<TestData />} />
+                <Route path="countries" element={<CountriesList />} />
+                <Route path="country-details/:name" element={<CountryDetails />} />
+                <Route
+                  path="/protected"
+                  element={
+                    <ProtectedRoute>
+                      <ProtectedTestData />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* Other routes... */}
+              </Routes>
+            </Box>
+          </Box>
+        </BrowserRouter>
+      </AuthProvider>
+    );
+  }
 
 export default App;
