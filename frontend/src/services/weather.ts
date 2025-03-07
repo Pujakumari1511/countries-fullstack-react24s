@@ -1,5 +1,3 @@
-import { Country } from "../types/country"
-import axios from "axios"
 
 
 export const countriesApi = {
@@ -8,4 +6,3 @@ export const countriesApi = {
         return response.data
     }
 }
-

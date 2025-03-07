@@ -1,9 +1,12 @@
+import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { Main } from '../types/weather';
 import { fetchAllCountries, selectAllCountries, selectCountriesError, selectCountriesLoading } from '../store/slices/countriesSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useEffect } from 'react';
 import { CountryCard } from './CountryCard';
-import { Alert, Box, CircularProgress } from '@mui/material';
+import { Alert, Box, Button, Card, CircularProgress, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const CountryDetails = () => {
     const { name } = useParams();
@@ -11,6 +14,8 @@ export const CountryDetails = () => {
     const countries = useAppSelector(selectAllCountries);
     const loading = useAppSelector(selectCountriesLoading);
     const error = useAppSelector(selectCountriesError)
+
+    const navigate = useNavigate();
 
     const decodedName = decodeURIComponent(name || "").toLowerCase();
     
@@ -22,7 +27,14 @@ export const CountryDetails = () => {
         if (!country){
             dispatch(fetchAllCountries());
         }
-    }, [country, dispatch]);
+    }, [country, dispatch]); 
+
+    const backToAllCountriesCards = () => {
+        navigate('/countries')
+    }
+    
+ 
+
 
     return (
         <Box  sx={{ 
@@ -41,9 +53,16 @@ export const CountryDetails = () => {
                 <Alert severity="error">{error}</Alert>
             ) : country ? (
                 <CountryCard country={country} />
+                
             ) : (
                 <Alert severity="warning">Country not found</Alert>
             )}
+            <Stack sx={{pt: 8 }}>
+                <Button onClick={backToAllCountriesCards} variant='contained'>Back</Button>
+            </Stack>
+            
         </Box>  
     )
 }
+
+

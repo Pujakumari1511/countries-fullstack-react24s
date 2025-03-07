@@ -4,13 +4,11 @@ import {
     fetchAllCountries,
     selectAllCountries,
 } from "../store/slices/countriesSlice";
-import { useNavigate } from "react-router-dom";
 import { CountryCard } from "./CountryCard";
-import { Box, Stack } from "@mui/material";
 
 const CountriesList = () => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const countries = useAppSelector(selectAllCountries);
 
     useEffect(()=> {
