@@ -9,6 +9,7 @@ import { ProtectedTestData } from "./components/ProtectedTestData";
 import { AuthRedirect } from "./components/Auth/AuthRedirected";
 import CountriesList from "./components/CountriesList";
 import { CountryDetails } from "./components/CountryDetails";
+import Favourites from "./components/Favourites";
 
 function App() { 
     return (
@@ -35,6 +36,14 @@ function App() {
                     <ProtectedRoute>
                       <ProtectedTestData />
                     </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/favorites"
+                  element={
+                    <ProtectedRoute>
+                      <Favourites />
+                  </ProtectedRoute>
                   }
                 />
                 {/* Other routes... */}

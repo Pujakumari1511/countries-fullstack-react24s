@@ -1,7 +1,7 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CountryState } from "../../types/country";
-import { countriesApi } from "../../services/countries";
+import { countriesApi } from "../../api/services/countries";
 import { RootState } from "../store";
 
 

@@ -1,4 +1,4 @@
-import { Country } from "../types/country"
+import { Country } from "../../types/country"
 import axios from "axios"
 
 

@@ -1,6 +1,7 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import { Country } from "../types/country";
 import { useNavigate } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
 
 interface CountryCardProp {
@@ -38,9 +39,12 @@ export const CountryCard = ({ country }: CountryCardProp) => {
             </CardContent>
             <CardActions>
                 <Button size="small" onClick={onclick}>Country Details</Button>
+                <FavoriteButton country={country} />
+                
             </CardActions>
-
+            
+            
         </Card>
-    )
-}
+    );
+};
 
