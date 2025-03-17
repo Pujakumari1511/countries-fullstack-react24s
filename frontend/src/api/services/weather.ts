@@ -1,8 +1,11 @@
+import axios from "axios"
+import { WeatherData } from "../../types/weather"
 
 
-export const countriesApi = {
-    getAllCountries: async (): Promise<Country[]> => {
-        const response = await axios.get<Country[]>('https://restcountries.com/v3.1/all')
-        return response.data
+
+export const weatherAPi = {
+    getWeatherByCity: async (): Promise<WeatherData> => {
+        const response = await axios.get("https://api.openweathermap.org/Delhi/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={e72d1c790cace10e00b939682ed7336a")
+        return response.data;
     }
 }
