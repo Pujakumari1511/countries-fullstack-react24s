@@ -1,26 +1,26 @@
-export interface WeatherMain {
-    temperature: Number;
+export interface Main {
+    temp: Number;
     feels_like: Number;
     humidity: Number;
 }
 
-export interface WeatherCondition {
+export interface Condition {
     description: string;
     icon: string;
 }
 
-export interface WeatherWind {
+export interface Wind {
     speed: Number;
 }
 
-export interface WeatherData {
-    main: WeatherMain;
-    weather: WeatherCondition;
-    wind: WeatherWind;
+export interface Weather {
+    main: Main;
+    weather: Condition[];
+    wind: Wind;
 }
 
 export interface WeatherState {
-    data: WeatherData | null;
+    weather: Weather | null;
     loading: boolean;
     error: string | null;
 }

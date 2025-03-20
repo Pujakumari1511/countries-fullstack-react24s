@@ -1,41 +1,33 @@
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Main } from '../types/weather';
-import { fetchAllCountries, selectAllCountries, selectCountriesError, selectCountriesLoading } from '../store/slices/countriesSlice';
+import { fetchAllCountries, fetchCountryByCode, selectAllCountries, selectCountriesError, selectCountriesLoading, selectSelectedCountry } from '../store/slices/countriesSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useEffect } from 'react';
 import { CountryCard } from './CountryCard';
 import { Alert, Box, Button, Card, CircularProgress, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { WeatherInfo } from './Weather/WeatherInfo';
+
 
 export const CountryDetails = () => {
-    const { name } = useParams();
+    const { countryCode } = useParams();
     const dispatch = useAppDispatch()
-    const countries = useAppSelector(selectAllCountries);
+    const country = useAppSelector(selectSelectedCountry);
     const loading = useAppSelector(selectCountriesLoading);
     const error = useAppSelector(selectCountriesError)
 
     const navigate = useNavigate();
 
-    const decodedName = decodeURIComponent(name || "").toLowerCase();
-    
-    const country = countries.find(
-      (country) => country.name.common.toLowerCase() === decodedName
-    );
+    if(!countryCode){
+        navigate('/countries')
+    }
 
     useEffect(() => {
-        if (!country){
-            dispatch(fetchAllCountries());
-        }
-    }, [country, dispatch]); 
+        dispatch(fetchCountryByCode(countryCode!))
+    }, [countryCode, dispatch]); 
 
     const backToAllCountriesCards = () => {
         navigate('/countries')
     }
-    
- 
-
-
     return (
         <Box  sx={{ 
             padding: 3,
@@ -46,13 +38,17 @@ export const CountryDetails = () => {
             
             margin: '0 auto'
             }}>
-            <h1>{decodeURIComponent(name || "")}</h1>
+            <h1>{country?.name.common}</h1>
             {loading ? (
                 <CircularProgress />
             ) : error ? (
                 <Alert severity="error">{error}</Alert>
             ) : country ? (
-                <CountryCard country={country} />
+                <>
+                    <CountryCard country={country} />
+                    <WeatherInfo capitalCity={country.capital[0]} />
+                </>
+                
                 
             ) : (
                 <Alert severity="warning">Country not found</Alert>
