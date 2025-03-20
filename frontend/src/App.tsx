@@ -27,9 +27,10 @@ function App() {
                   </>
                   } 
                   />
+                <Route path="/home" element={<CountriesList />} /> 
                 <Route path="test" element={<TestData />} />
                 <Route path="countries" element={<CountriesList />} />
-                <Route path="country-details/:name" element={<CountryDetails />} />
+                <Route path="country-details/:countryCode" element={<CountryDetails />} />
                 <Route
                   path="/protected"
                   element={

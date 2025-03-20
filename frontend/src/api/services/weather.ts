@@ -1,11 +1,14 @@
 import axios from "axios"
-import { WeatherData } from "../../types/weather"
+import { Weather } from "../../types/weather"
 
 
+const WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+
+const weatherBaseUrl = "https://api.openweathermap.org/data/2.5";
 
 export const weatherAPi = {
-    getWeatherByCity: async (): Promise<WeatherData> => {
-        const response = await axios.get("https://api.openweathermap.org/Delhi/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={e72d1c790cace10e00b939682ed7336a")
+    getWeatherByCity: async (capitalCity: string): Promise<Weather> => {
+        const response = await axios.get<Weather>(`${weatherBaseUrl}/weather?q=${capitalCity}&units=metric&appid=${WEATHER_API_KEY}`)
         return response.data;
     }
 }
