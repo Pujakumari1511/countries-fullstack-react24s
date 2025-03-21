@@ -17,7 +17,7 @@ const CountriesList = () => {
     const [page, setPage] = useState(1);  
     const [countries, setCountries] = useState<Country[]>(countryList)
     const dispatch = useAppDispatch();
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 12;
 
     //searching for countries
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,13 +27,13 @@ const CountriesList = () => {
             setCountries(countryList)
             return
         }
-        const filteredCountries = countries.filter((country) => 
-        country.name.common.toLowerCase().includes(inputValue))
+        const filteredCountries = countryList.filter((country) => 
+        country.name.common.toLowerCase().includes(inputValue));
         setCountries(filteredCountries);
     }
 
-   
-
+    //pagination
+    const numberOfPages = Math.ceil(countries.length/ITEMS_PER_PAGE);
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedCountries = countries.slice(startIndex, endIndex)
@@ -72,27 +72,6 @@ const CountriesList = () => {
                         )
                     }}
                 />
-{/* 
-                    <TextField
-                    id="search-bar"
-                    className="text"
-                    variant="outlined"
-                    placeholder="Search country by region"
-                    value={searchInput}
-                    onChange={handleChange}
-                    size="small"
-                    sx={{
-                        width: 550,
-                        margin: "10px auto"
-                    }}
-                    InputProps={{
-                        endAdornment: (
-                            <IconButton type="submit" aria-label="search">
-                                <SearchIcon style={{ fill: "blue" }} />
-                            </IconButton>
-                        )
-                    }}
-                /> */}
             </form>
 
             {loading ? (
@@ -111,17 +90,26 @@ const CountriesList = () => {
                         </Button>
                     </div>
                 ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '40px' }}>
-                   
-                        {countries.map((country) => (
-                            <CountryCard key={country.name.common} country={country} />    
-                        ))}
-                       
-                        {/* <Pagination count={10} onChange={paginatedCountries} variant="outlined" shape="rounded" /> */}
-                        
-                        {countries.length === 0 && (<span>No Country found</span>)} 
+                    <>
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+                            gap: '30px',
+                            paddingTop: '50px' // Added padding top
+                        }}>
+                    
+                            {paginatedCountries.map((country) => (
+                                <CountryCard key={country.name.common} country={country} />    
+                            ))}
+                            
+                            {countries.length === 0 && (<span>No Country found</span>)} 
 
-                    </div>
+                        </div>
+                        <Stack spacing={2} paddingTop={5} alignItems={'center'}>
+                            <Pagination count={numberOfPages} onChange={(_, value) => setPage(value)} variant="outlined" shape="rounded" />
+                        </Stack>
+                        
+                    </>
                 )}
                   
         </> 
