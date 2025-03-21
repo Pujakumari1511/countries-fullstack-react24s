@@ -47,9 +47,7 @@ export const CountryDetails = () => {
                 <>
                     <CountryCard country={country} />
                     <WeatherInfo capitalCity={country.capital[0]} />
-                </>
-                
-                
+                </>   
             ) : (
                 <Alert severity="warning">Country not found</Alert>
             )}
