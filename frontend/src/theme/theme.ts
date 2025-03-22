@@ -1,7 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 
-export const theme = createTheme({
+export const lightTheme = createTheme({
   palette: {
+    mode: 'light', // Important to specify mode
     primary: {
       main: '#1976d2',
       light: '#42a5f5',
@@ -11,6 +12,14 @@ export const theme = createTheme({
       main: '#9c27b0',
       light: '#ba68c8',
       dark: '#7b1fa2',
+    },
+    background: {
+      default: '#ffffff',
+      paper: '#f5f5f5',
+    },
+    text: {
+      primary: '#000000',
+      secondary: '#333333',
     },
   },
   typography: {
@@ -23,41 +32,29 @@ export const theme = createTheme({
       'Arial',
       'sans-serif',
     ].join(','),
-    h1: {
-      fontSize: '2.5rem',
-      fontWeight: 600,
+  },
+});
+
+export const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#90caf9',
+      light: '#bbdefb',
+      dark: '#42a5f5',
     },
-    h2: {
-      fontSize: '2rem',
-      fontWeight: 600,
+    secondary: {
+      main: '#f48fb1',
+      light: '#f8bbd0',
+      dark: '#c2185b',
     },
-    h3: {
-      fontSize: '1.75rem',
-      fontWeight: 600,
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
     },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.5,
-    },
-    button: {
-      textTransform: 'none',
+    text: {
+      primary: '#ffffff',
+      secondary: '#bbbbbb',
     },
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        },
-      },
-    },
-  },
-}); 
+});
