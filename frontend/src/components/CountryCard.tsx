@@ -2,6 +2,7 @@ import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@
 import { Country} from "../types/country";
 import { useNavigate } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
+import { Language, LocationCity, People, Public } from "@mui/icons-material";
 
 
 interface CountryCardProp {
@@ -13,8 +14,8 @@ export const CountryCard = ({ country }: CountryCardProp) => {
     const navigate = useNavigate();
 
     const onclick = () => {
-        navigate(`/country-details/${country.cca3}`);
-        //navigate("/country-details/" + encodeURI(country.cca3));
+        navigate(`/countries/${country.cca3}`);
+        //navigate("/country-details/" + encodeURI(country.name.common));
     }
 
     return (
@@ -28,21 +29,28 @@ export const CountryCard = ({ country }: CountryCardProp) => {
                 <Typography gutterBottom variant="h5" component="div">
                 {country.name.common}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary',}}><b>Population: </b>  
-                {country.population}
+                <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
+                    <People sx={{ mr: 0.5 }} />  
+                    {country.population}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', }}><b>Capital: </b>
-                {country.capital}
+
+                <Typography variant="body2" sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}>
+                    <LocationCity sx={{ mr: 0.5 }} />
+                    {country.capital}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}><b>Languages: </b>     
-                {country.languages && Object.values(country.languages).join(', ')}
+
+                <Typography variant="body2" sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}>
+                    <Language sx={{ mr: 0.5 }} />
+                    {country.languages && Object.values(country.languages)[0]}
                 </Typography> 
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}><b>Region: </b>     
-                {country.region && Object.values(country.region)}
-                </Typography>
+
+                <Typography variant="body2" sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}>
+                    <Public sx={{ mr: 0.5 }} />
+                    {country.region}
+                    </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" onClick={onclick}>Country Details</Button>
+                <Button size="small" onClick={onclick}>See more</Button>
                 <FavoriteButton country={country} />
             </CardActions>
             

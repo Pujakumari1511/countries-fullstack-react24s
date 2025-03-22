@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CountryState } from "../../types/country";
+import { CountryState, Country } from "../../types/country";
 import { countriesApi } from "../../api/services/countries";
 import { RootState } from "../store";
+
 
 const initialState: CountryState = {
     countries: [],
@@ -67,10 +68,10 @@ export const countriesSlice = createSlice({
     }
 })
 
-export const selectAllCountries = (state: RootState) => state.countries.countries;
-export const selectCountriesLoading = (state: RootState) => state.countries.loading;
-export const selectCountriesError = (state: RootState) => state.countries.error;
-export const selectSelectedCountry = (state: RootState) => state.countries.selectedCountry
+export const selectAllCountries = (state: RootState): Country[] => state.countries.countries;
+export const selectCountriesLoading = (state: RootState): boolean => state.countries.loading;
+export const selectCountriesError = (state: RootState): string | null => state.countries.error;
+export const selectSelectedCountry = (state: RootState): Country | null => state.countries.selectedCountry
 
 export const { clearSelectedCountry } = countriesSlice.actions;
 export default countriesSlice.reducer;
