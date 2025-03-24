@@ -6,8 +6,9 @@ import {
 } from "../store/slices/countriesSlice";
 import { CountryCard } from "./CountryCard";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { Button, CircularProgress, IconButton, Pagination, Stack, TextField } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, CircularProgress, FormControlLabel, IconButton, Pagination, Stack, TextField, Typography } from "@mui/material";
 import { Country } from "../types/country";
+import TuneIcon from '@mui/icons-material/Tune';
 
 const CountriesList = () => {
     const countryList = useAppSelector(selectAllCountries);
@@ -47,12 +48,9 @@ const CountriesList = () => {
         dispatch(fetchAllCountries());
     }, [dispatch]);
 
-   
-
     return (
         <>
-        
-            <form style={{ display: "flex", alignItems: "center" }} onSubmit={(e) => e.preventDefault()}>
+            <Box display="flex" justifyContent="center" width="100%">
                 <TextField
                     id="search-bar"
                     className="text"
@@ -63,7 +61,7 @@ const CountriesList = () => {
                     size="small"
                     sx={{
                         width: 550,
-                        margin: "10px auto"
+                        margin: "10px auto",
                     }}
                     InputProps={{
                         endAdornment: (
@@ -72,8 +70,30 @@ const CountriesList = () => {
                             </IconButton>
                         )
                     }}
-                />
-            </form>
+                />  
+            </Box>
+                      
+            <Accordion>
+                    <AccordionSummary
+                    expandIcon={<TuneIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    >
+                    <Typography component="span">Accordion 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                    <Box className="button-container">
+                        <Button variant="contained" className="button">
+                            Select Options
+                            <Box className="checkbox-container">
+                            <FormControlLabel control={<Checkbox />} label="Option 1" />
+                            <FormControlLabel control={<Checkbox />} label="Option 2" />
+                            <FormControlLabel control={<Checkbox />} label="Option 3" />
+                            </Box>
+                        </Button>
+                    </Box>
+                    </AccordionDetails>
+                </Accordion>
 
             {loading ? (
             <div style={{ textAlign: 'center', padding: '2rem' }}>

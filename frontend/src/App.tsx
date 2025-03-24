@@ -4,12 +4,13 @@ import { TestData } from "./components/TestData";
 import { AuthProvider } from "./context/AuthContext";
 import { Login } from "./components/Auth/Login";
 import { ProtectedRoute } from "./components/Auth/ProtectedRoute";
-import { Navigation } from "./components/Navigation";
+import { Navigation } from "./components/Navigation"; 
 import { ProtectedTestData } from "./components/ProtectedTestData";
 import { AuthRedirect } from "./components/Auth/AuthRedirected";
 import CountriesList from "./components/CountriesList";
 import { CountryDetails } from "./components/CountryDetails";
 import Favourites from "./components/Favourites";
+
 
 function App() { 
     return (
