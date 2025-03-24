@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
 import { Language, LocationCity, People, Public } from "@mui/icons-material";
 
-
 interface CountryCardProp {
     country: Country;
 }
@@ -50,7 +49,9 @@ export const CountryCard = ({ country }: CountryCardProp) => {
                     </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" onClick={onclick}>See more</Button>
+                <Button sx={{
+                    color: (theme) => theme.palette.secondary.light
+                }} size="small" onClick={onclick}>See more</Button>
                 <FavoriteButton country={country} />
             </CardActions>
             

@@ -59,7 +59,9 @@ const FavoriteButton = ({country, onToggle}: FavoriteButtonProps) => {
 
     return (
         <Tooltip title={isFavorite ? "Remove from favorites" : "Add to favorites"}>
-            <IconButton onClick={handleToggleFavorite} disabled={loading} color="primary">
+            <IconButton onClick={handleToggleFavorite} disabled={loading} sx={{
+                    color: (theme) => theme.palette.secondary.light
+                }}>
                 {isFavorite ? <Favorite /> : <FavoriteBorder />}
             </IconButton>
         </Tooltip>

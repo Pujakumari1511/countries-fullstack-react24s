@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { Alert, Box, Button, Card, CardMedia, CircularProgress, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { WeatherInfo } from './Weather/WeatherInfo';
-import { Palette } from '@mui/icons-material';
 
 
 export const CountryDetails = () => {
