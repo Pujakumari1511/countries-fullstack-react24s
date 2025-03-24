@@ -10,11 +10,29 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Checkbox, C
 import { Country } from "../types/country";
 import TuneIcon from '@mui/icons-material/Tune';
 
+interface FilterState {
+    countryOrCapital: string;
+    regions: Set<string>;
+    subregions: Set<string>;
+    currencies: string;
+    area: number;
+    population: number;
+}
+
+const initialFilterState: FilterState = {
+    countryOrCapital: "",
+    regions: new Set<string>(),
+    subregions: new Set<string>(),
+    currencies: "",
+    area: 0,
+    population: 0
+}
+
 const CountriesList = () => {
     const countryList = useAppSelector(selectAllCountries);
     const loading = useAppSelector((state) => state.countries.loading);
     const error = useAppSelector((state) => state.countries.error);
-    const [searchInput, setSearchInput] = useState<string>("");
+    const [filterState, setFilterState] = useState<FilterState>(initialFilterState);
     const [page, setPage] = useState(1);  
     const [countries, setCountries] = useState<Country[]>(countryList)
     const dispatch = useAppDispatch();
@@ -22,16 +40,27 @@ const CountriesList = () => {
 
     //searching for countries
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let inputValue = e.target.value.toLowerCase();
-        setSearchInput(inputValue);
-        if(inputValue.trim().length === 0){
-            setCountries(countryList)
-            return
+        const { name, value, checked } = e.target;
+        const key = name as keyof FilterState;
+        const newFilterState = {...filterState}
+        if(['regions', 'subregions'].includes(name)) {
+            if(checked) {
+                (newFilterState[key] as Set<String>).add(value)
+            } else {
+                (newFilterState[key] as Set<String>).delete(value)
+            }
         }
-        const filteredCountries = countryList.filter((country) => 
-        country.name.common.toLowerCase().includes(inputValue));
-        setCountries(filteredCountries);
+        if(['area', 'population'].includes(name)) {
+            (newFilterState[key as 'area' | 'population'] as number) = parseInt(value);
+        }
+        if(['countryOrCapital','currencies'].includes(name)) {
+            (newFilterState[key as 'countryOrCapital' | 'currencies'] as string) = value.toLowerCase();
+        }
+        setFilterState(newFilterState);
     }
+
+    const regions = [...new Set(countryList.map(country => country.region))]
+    const subRegions = [...new Set(countryList.filter(country => filterState.regions.has(country.region)).filter(country => country.subregion).map(country => country.subregion!))]
 
     //pagination
     const numberOfPages = Math.ceil(countries.length/ITEMS_PER_PAGE);
@@ -39,6 +68,20 @@ const CountriesList = () => {
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const paginatedCountries = countries.slice(startIndex, endIndex)
 
+    useEffect(() => {
+        let filteredCountries = countryList.filter((country) => 
+            country.name.common.toLowerCase().includes(filterState.countryOrCapital) // filtering country by name
+            || (country.capital && country.capital.some(city => city.toLowerCase().includes(filterState.countryOrCapital)))); // filtering countries by capital
+        if(filterState.regions.size > 0) {
+            filteredCountries = filteredCountries.filter(country => filterState.regions.has(country.region)) // filter by region
+        }
+
+        if(filterState.subregions.size > 0) {
+            filteredCountries = filteredCountries.filter(country => country.subregion && filterState.subregions.has(country.subregion)) // filter by subregion
+        }
+        
+        setCountries(filteredCountries);
+    }, [filterState])
 
     useEffect(() => {
         setCountries(countryList)
@@ -48,15 +91,45 @@ const CountriesList = () => {
         dispatch(fetchAllCountries());
     }, [dispatch]);
 
+    const filters = (
+        <Box>
+            <Box>
+                <Typography>Region</Typography>
+                {regions.map(reg => (
+                    <FormControlLabel
+                    key={reg}
+                    control={
+                        <Checkbox checked={filterState.regions.has(reg)} onChange={handleChange} name="regions" value={reg} />
+                    }
+                    label={reg}
+                    />
+                ))}
+            </Box>
+            {subRegions.length > 0 && <Box>
+                <Typography>Subregion</Typography>
+                {subRegions.map(subReg => (
+                    <FormControlLabel
+                    key={subReg}
+                    control={
+                        <Checkbox checked={filterState.subregions.has(subReg)} onChange={handleChange} name="subregions" value={subReg} />
+                    }
+                    label={subReg}
+                    />
+                ))}
+            </Box>}
+        </Box>
+    )
+
     return (
         <>
             <Box display="flex" justifyContent="center" width="100%">
                 <TextField
                     id="search-bar"
+                    name="countryOrCapital"
                     className="text"
                     variant="outlined"
-                    placeholder="Search country name"
-                    value={searchInput}
+                    placeholder="Search by country name or its capital"
+                    value={filterState.countryOrCapital}
                     onChange={handleChange}
                     size="small"
                     sx={{
@@ -72,29 +145,20 @@ const CountriesList = () => {
                     }}
                 />  
             </Box>
-                      
+            
             <Accordion>
-                    <AccordionSummary
-                    expandIcon={<TuneIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    >
-                    <Typography component="span">Accordion 1</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                    <Box className="button-container">
-                        <Button variant="contained" className="button">
-                            Select Options
-                            <Box className="checkbox-container">
-                            <FormControlLabel control={<Checkbox />} label="Option 1" />
-                            <FormControlLabel control={<Checkbox />} label="Option 2" />
-                            <FormControlLabel control={<Checkbox />} label="Option 3" />
-                            </Box>
-                        </Button>
-                    </Box>
-                    </AccordionDetails>
-                </Accordion>
-
+                <AccordionSummary
+                expandIcon={<TuneIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                >
+                {<Typography component="span">Filter</Typography>}
+                </AccordionSummary>
+                <AccordionDetails>
+                 {filters}
+                </AccordionDetails>
+            </Accordion>
+            
             {loading ? (
             <div style={{ textAlign: 'center', padding: '2rem' }}>
                 <CircularProgress />
